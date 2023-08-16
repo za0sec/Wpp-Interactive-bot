@@ -10,6 +10,7 @@ This project is an advanced and enhanced implementation based on [whatsapp-web.j
 
 - **Auto-response:** Set up automatic responses based on keywords or specific phrases.
 - **Scheduled Messaging:** Ability to send out automated messages at specific times of the day.
+- **Multilanguage Support:** Choose between English and Spanish for bot prompts and interactions.
 - **Keyword-triggered Replies:** Automatically respond to received messages that contain certain keywords or phrases.
 - **QR Code Support:** Visually displays the QR code for easier WhatsApp Web login.
 - **Interactive Configuration:** Prompt-based setup allowing users to define auto-response triggers and replies.

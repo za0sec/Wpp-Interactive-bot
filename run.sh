@@ -10,12 +10,29 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
-# Comprueba si node_modules existe y, si no, instala dependencias
+# Check if node_modules exists and, if not, install dependencies
 if [ ! -d "node_modules" ]; then
-    echo -e "\n${yellowColour}[*] Instalando dependencias...${endColour}\n"
+    echo -e "\n${yellowColour}[*] Installing dependencies...${endColour}\n"
     npm install
 fi
 
-# Ejecuta el programa
-node index.js
+# Prompt for language selection
+echo -e "${blueColour}Choose your language / Elige tu idioma:${endColour}"
+echo -e "${greenColour}1. English${endColour}"
+echo -e "${greenColour}2. Español${endColour}"
+read choice
+
+case $choice in
+    1)
+    node index_en.js
+    ;;
+
+    2)
+    node index_es.js
+    ;;
+
+    *)
+    echo -e "${redColour}Invalid choice / Opción no válida${endColour}"
+    ;;
+esac
 
