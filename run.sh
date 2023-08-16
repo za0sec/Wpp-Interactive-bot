@@ -17,7 +17,7 @@ if [ ! -d "node_modules" ]; then
 fi
 
 # Prompt for language selection
-echo -e "${blueColour}Choose your language / Elige tu idioma:${endColour}"
+echo -e "${blueColour}Choose your language / Elige tu idioma:\n${endColour}"
 echo -e "${greenColour}1. English${endColour}"
 echo -e "${greenColour}2. Español${endColour}"
 read choice

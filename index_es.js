@@ -2,15 +2,24 @@ const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const readline = require('readline');
 const schedule = require('node-schedule');
+const axios = require('axios');
 
 const client = new Client();
 
 let responses = {};
 
+const OPENWEATHER_API_KEY = 'b99ec1349de4aa78fcf05e75da037170';
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+
+async function getWeather(city) {
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=es`);
+    const { weather, main } = response.data;
+    return `El clima en ${city} es ${weather[0].description} con una temperatura de ${main.temp}°C.`;
+}
 
 function askForMessages(counter) {
     if (counter === 0) {
@@ -44,7 +53,7 @@ function setupAutoMessage() {
     });
 }
 
-rl.question('¿Qué deseas hacer?\n1. Enviar un mensaje automáticamente todos los días a una hora específica.\n2. Configurar respuestas automáticas basadas en palabras o frases.\nElige 1 o 2: ', (choice) => {
+rl.question('¿Qué deseas hacer?\n1. Enviar un mensaje automáticamente todos los días a una hora específica.\n2. Configurar respuestas automáticas basadas en palabras o frases.\n3. Configurar alerta climática (!clima)\nElige 1, 2 o 3: ', (choice) => {
     switch(choice) {
         case '1':
             setupAutoMessage();
@@ -59,6 +68,14 @@ rl.question('¿Qué deseas hacer?\n1. Enviar un mensaje automáticamente todos l
                     rl.close();
                 }
             });
+            break;
+        case '3':
+            responses["!clima"] = async () => {
+                const city = "Buenos Aires";  // Puedes hacer esto dinámico también
+                return await getWeather(city);
+            };
+            rl.close();
+            client.initialize();
             break;
         default:
             console.log("Opción no válida.");
@@ -75,10 +92,16 @@ client.on('ready', () => {
     console.log('Cliente listo!');
 });
 
-client.on('message', message => {
+client.on('message', async message => {
     for (let trigger in responses) {
         if (message.body.toLowerCase().includes(trigger)) {
-            message.reply(responses[trigger]);
+            if (typeof responses[trigger] === "function") {
+                const response = await responses[trigger]();
+                message.reply(response);
+            } else {
+                message.reply(responses[trigger]);
+            }
         }
     }
 });
+
