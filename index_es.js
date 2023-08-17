@@ -1,10 +1,13 @@
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const readline = require('readline');
 const schedule = require('node-schedule');
 const axios = require('axios');
 
-const client = new Client();
+const client = new Client({
+    authStrategy: new LocalAuth()
+});
+
 
 let responses = {};
 
