@@ -5,6 +5,9 @@ const schedule = require('node-schedule');
 const axios = require('axios');
 
 const client = new Client({
+	puppeteer: {
+      executablePath: '/usr/bin/chromium'
+   	},
     authStrategy: new LocalAuth()
 });
 
